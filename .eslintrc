@@ -1,0 +1,32 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "jsx-a11y/href-no-hash": 0
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "globals": {
+    "__CONFIG": true,
+    "Event": true,
+    "window": true
+  }
+}
