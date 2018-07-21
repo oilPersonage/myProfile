@@ -1,15 +1,15 @@
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    index: ['babel-polyfill'].concat([`./src/index.js`])
+    index: ['babel-polyfill'].concat(['./src/index.js']),
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'index.js'
+    filename: 'index.js',
   },
   module: {
     rules: [
@@ -18,31 +18,25 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015', 'react' ],
+          presets: ['es2015', 'react'],
           plugins: [
-            "transform-class-properties",
-            "react-hot-loader/babel",
-            "transform-object-rest-spread"
+            'transform-class-properties',
+            'react-hot-loader/babel',
+            'transform-object-rest-spread',
           ],
-        }
+        },
       },
       {
         test: /\.html$/,
         loader: 'html-loader',
       },
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader,
-          "css-loader"
-        ]
-      },
-      {
         test: /\.sass$/i,
         exclude: /node_modules/,
-        use: [MiniCssExtractPlugin.loader,
+        use: ['css-hot-loader'].concat([MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
-        ]
+        ]),
       },
       {
         test: /\.(png|jpg|jpeg|gif|ico)$/,
@@ -62,28 +56,28 @@ module.exports = {
         options: {
           outputPath: 'fonts/',
           name: '[name].[ext]',
-          publicPath: '../fonts'
-        }
+          publicPath: '../fonts',
+        },
       },
     ],
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: './css/main.css',
-      publicPath: '/'
+      publicPath: '/',
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: true,
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
   ],
-  devtool: 'eval-source-map',
+  devtool: 'cheap-module-eval-source-map',
   devServer: {
     port: 3000,
     hot: true,
   },
   resolve: {
-    extensions: ['.js','.jsx', '.png', 'json']
-  }
+    extensions: ['.js', '.jsx', '.png', 'json'],
+  },
 };

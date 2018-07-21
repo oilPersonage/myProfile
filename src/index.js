@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
-import './css/main.css';
+import './sass/main.sass';
 import App from './components/App';
-console.log(1)
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
+ReactDOM.render(
+  <App />,
+  document.getElementById('root'),
+);
 
