@@ -5,10 +5,9 @@ const menu = {
 
 export default function reducer(state = menu, action) {
   if (action.type === 'MENU') {
-    return { ...state, show: action.payload};
+    return { ...state, show: !state.show};
   }
   if (action.type === 'AnimationFadeIn') {
-    console.log(state)
     return { ...state,  animation: !state.animation};
   }
   return state;

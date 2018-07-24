@@ -7,7 +7,7 @@ class Home extends Component {
         Главный блок
         <div className="containerBlock">1</div>
         <div className="containerBlock">2</div>
-        <div className="containerBlock">3</div>
+        <div className="containerBlock containerBlockThree">3</div>
       </div>
     );
   }

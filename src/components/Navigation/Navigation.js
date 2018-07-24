@@ -36,7 +36,7 @@ class Navigation extends Component {
         {scale: 0.8,
           x: -this.menu.clientWidth / 2, y: -this.menu.clientHeight / 2,
           opacity: 0,
-          ease: Back.easeInOut.config(1.7)}); }
+          ease: Back.easeInOut.config(1.7), onComplete: () => {this.props.onClick(); this.props.animationMenu()}}); }
   }
 
   componentDidMount() {
@@ -69,6 +69,7 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
+    animationMenu: () => dispatch({ type: 'AnimationFadeIn' }),
     onClick: () => {
       dispatch({type: "MENU", payload: false})
     }

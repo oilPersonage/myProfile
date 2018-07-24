@@ -10,7 +10,10 @@ class Burger extends Component {
       isOpen: false,
     };
 
-    this.Animation = (target, cb) => TweenMax
+    this.animation = false;
+    this.show = false;
+
+    this.Animation = (target) => TweenMax
       .staggerFromTo(target, 0.5, { width: 0 }, { width: 50 }, 0.2);
   }
 
@@ -19,44 +22,40 @@ class Burger extends Component {
     for (let i = 0; i < array.children.length; i++) {
       target.push(array.children[i]);
     }
-    this.IntervalAnimation = setInterval(() => {
-      this.Animation(target);
-    }, 4000);
+    this.Animation(target);
   }
 
-  componentWillReceiveProps () {
-    this.props.menu.show && this.onClick()
-  }
-
-  componentDidMount() {
-    this.AnimationBurger(this.burgerBox)
-  }
-
-  componentWillMount() {
-    clearTimeout(this.IntervalAnimation);
-  }
-
-  toggleMenu = () => {
-    let menu = Object.assign({}, this.props.menu)
-    menu.animation = this.props.menu.show && !menu.animation
-    menu.animation === false && this.props.toggleMenu(!this.props.menu.show)
-    menu.animation && this.props.animationMenu()
-    this.onClick()
-  }
-
-  onClick = () => {
-    const isOpen = !this.props.menu.show
-    if (isOpen) {
-      clearTimeout(this.IntervalAnimation);
+  componentWillReceiveProps (nextProps) {
+    this.animation = nextProps.menu.animation
+    this.show = nextProps.menu.show
+    if (this.show && this.animation === false) {
+      clearInterval(this.IntervalAnimation);
       TweenMax.to(this.burgerItemTop, 0.3, {rotation: 45, top: 15})
       TweenMax.to(this.burgerItemMiddle, 0, {opacity: 0})
       TweenMax.to(this.burgerItemBottom, 0.3, {rotation: -225, top: 15})
-    } else {
+    }
+  }
+
+  componentDidMount() {
+    this.IntervalAnimation = setInterval(() => this.AnimationBurger(this.burgerBox), 3000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.IntervalAnimation);
+  }
+
+  toggleMenu = () => {
+    if (this.animation) {return}
+    this.show && this.props.animationMenu()
+    if (this.state.isOpen) {
+      this.IntervalAnimation = setInterval(() => this.AnimationBurger(this.burgerBox), 3000)
       TweenMax.to(this.burgerItemTop, 0.3, {rotation: 0, top: 0})
       TweenMax.to(this.burgerItemMiddle, 0, {opacity: 1})
       TweenMax.to(this.burgerItemBottom, 0.3, {rotation: 0, top: 30})
       this.AnimationBurger(this.burgerBox)
     }
+    this.setState({isOpen: !this.state.isOpen})
+    !this.state.isOpen && this.props.toggleMenu()
   }
 
   render() {
