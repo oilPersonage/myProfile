@@ -11,12 +11,17 @@
   "license": "ISC",
   "dependencies": {
     "gsap": "^2.0.1",
-    "react": "^16.4.0",
+    "pubsub-js": "^1.6.0",
+    "react": "^16.4.1",
     "react-canvas": "^1.3.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
-    "redux": "^4.0.0"
+    "react-three": "^0.9.7",
+    "react-three-renderer": "^3.2.4",
+    "redux": "^4.0.0",
+    "three": "^0.94.0",
+    "three-orbit-controls": "^82.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -35,6 +40,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.8.2",
     "file-loader": "^1.1.11",
+    "glslx-loader": "0.0.4",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",

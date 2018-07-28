@@ -27,6 +27,10 @@ module.exports = {
         },
       },
       {
+        test: /\.glsl/,
+        loader: 'glslx-loader',
+      },
+      {
         test: /\.html$/,
         loader: 'html-loader',
       },
@@ -45,7 +49,7 @@ module.exports = {
             // loader: 'url-loader'
             loader: 'file-loader',
             options: {
-              name: './images/[name].[hash].[ext]',
+              name: './images/[name].[ext]',
               publicPath: '../',
             },
           },

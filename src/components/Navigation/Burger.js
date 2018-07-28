@@ -8,6 +8,7 @@ class Burger extends Component {
 
     this.state = {
       isOpen: false,
+      nextClick: true,
     };
 
     this.animation = false;
@@ -28,11 +29,22 @@ class Burger extends Component {
   componentWillReceiveProps (nextProps) {
     this.animation = nextProps.menu.animation
     this.show = nextProps.menu.show
-    if (this.show && this.animation === false) {
+    if (this.show && this.animation === false && !this.props.menu.animation) {
       clearInterval(this.IntervalAnimation);
       TweenMax.to(this.burgerItemTop, 0.3, {rotation: 45, top: 15})
       TweenMax.to(this.burgerItemMiddle, 0, {opacity: 0})
-      TweenMax.to(this.burgerItemBottom, 0.3, {rotation: -225, top: 15})
+      TweenMax.to(this.burgerItemBottom, 0.3, {rotation: -225, top: 15, onComplete: () => {
+        const interVal = setTimeout(()=> {
+          this.setState({nextClick: true})
+          clearTimeout(interVal)
+          }, 700)
+      }})
+    }
+    if ( !this.show) {
+      TweenMax.to(this.burgerItemTop, 0.3, {rotation: 0, top: 0})
+      TweenMax.to(this.burgerItemMiddle, 0, {opacity: 1})
+      TweenMax.to(this.burgerItemBottom, 0.3, {rotation: 0, top: 30, onComplete: () => {this.setState({nextClick: true})
+        }})
     }
   }
 
@@ -46,19 +58,15 @@ class Burger extends Component {
 
   toggleMenu = () => {
     if (this.animation) {return}
-    this.show && this.props.animationMenu()
-    if (this.state.isOpen) {
-      this.IntervalAnimation = setInterval(() => this.AnimationBurger(this.burgerBox), 3000)
-      TweenMax.to(this.burgerItemTop, 0.3, {rotation: 0, top: 0})
-      TweenMax.to(this.burgerItemMiddle, 0, {opacity: 1})
-      TweenMax.to(this.burgerItemBottom, 0.3, {rotation: 0, top: 30})
-      this.AnimationBurger(this.burgerBox)
+    if (this.state.nextClick) {
+      this.show && this.props.animationMenu()
+      this.setState({isOpen: !this.state.isOpen, nextClick: false})
+      !this.state.isOpen && this.props.toggleMenu()
     }
-    this.setState({isOpen: !this.state.isOpen})
-    !this.state.isOpen && this.props.toggleMenu()
   }
 
   render() {
+    console.log(this.state.nextClick)
     const isOpen = this.props.menu.show
     return (
       <div className="burgerBox" onClick={this.toggleMenu}>
