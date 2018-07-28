@@ -36,8 +36,8 @@ void main()	{
 
 
 
-	
-	
+
+
 
 	if(dist<1.){
 		//rgba1 = vec4(1.,0.,0.,1.);
@@ -60,5 +60,5 @@ void main()	{
 
 	gl_FragColor = rgba1*alpha;
 	// gl_FragColor = vec4(dist);
-	
+
 }
