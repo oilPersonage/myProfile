@@ -18,7 +18,7 @@ export default function init(elem) {
   renderer = new THREE.WebGLRenderer();
 
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerWidth);
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
   const container = elem;
   container.appendChild(renderer.domElement);
