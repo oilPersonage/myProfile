@@ -27,8 +27,8 @@ module.exports = {
         },
       },
       {
-        test: /\.glsl/,
-        loader: 'glslx-loader',
+        test: /\.(glsl|vs|fs)$/,
+        loader: 'shader-loader',
       },
       {
         test: /\.html$/,

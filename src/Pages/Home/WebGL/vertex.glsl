@@ -9,14 +9,14 @@ uniform vec2 pixels;
 uniform vec2 uvRate1;
 
 void main() {
-//  vUv = uv;
-//  vec2 _uv = uv - 0.5;
-//  vUv1 = _uv;
-//  vUv1 *= uvRate1.xy;
-//
-//  vUv1 += 0.5;
+  vUv = uv;
+  vec2 _uv = uv - 0.5;
+  vUv1 = _uv;
+  vUv1 *= uvRate1.xy;
+
+  vUv1 += 0.5;
 
 
 
-  gl_Position = vec4( 1.,1.,0.5, 1.0 );
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
