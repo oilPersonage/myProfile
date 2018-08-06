@@ -1,22 +1,15 @@
 uniform float time;
+uniform float waveLength;
+uniform vec2 resolution;
+uniform vec2 mouse;
+uniform float ratio;
+uniform float hWave;
 varying vec2 vUv;
-varying vec2 vUv1;
 varying vec4 vPosition;
-
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform vec2 pixels;
-uniform vec2 uvRate1;
-
 void main() {
   vUv = uv;
-  vec2 _uv = uv - 0.5;
-  vUv1 = _uv;
-  vUv1 *= uvRate1.xy;
-
-  vUv1 += 0.5;
 
 
-
-  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+  lowp float vWave = sin( time / 2.+ (position.x + position.y)*waveLength);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position.x + mouse.y * 0.02, position.y + mouse.x*0.02,vWave*0.02, 1.0 );
 }

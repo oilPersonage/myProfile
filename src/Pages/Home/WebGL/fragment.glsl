@@ -1,64 +1,35 @@
 uniform float time;
-uniform float progress;
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform vec2 pixels;
-uniform vec2 uvRate1;
-uniform vec2 accel;
+uniform vec2 resolution;
 uniform vec2 mouse;
-uniform float velocity;
-uniform float alpha;
-
+uniform sampler2D img1;
+uniform float waveLength;
+uniform float opacity;
+uniform float ratio;
 varying vec2 vUv;
-varying vec2 vUv1;
 varying vec4 vPosition;
 
-
-vec2 mirrored(vec2 v) {
-	vec2 m = mod(v,2.);
-	return mix(m,2.0 - m, step(1.0 ,m));
-}
-
-
-
 void main()	{
-	vec2 uv = gl_FragCoord.xy/pixels.xy;
+	vec2 p = 7.68*(gl_FragCoord.xy/resolution.xy - vec2(0.5,1.0)) - vec2(mouse.x,-15);
+	vec2 i = p;
 
-	vec2 uv1 = vUv1;
-	uv1.y += sin(uv1.y * 5.005 + time * 0.8) * 0.0022;
-	uv1.x += sin(uv1.x * 10.005 + time * 0.6) * 0.0032;
+	float c = 0.;
+    for(int n = 0; n<10; n++){
+        float t = ( 1.0 - ( 10.0 / float( n + 33 ) ) ) * (time )*0.5;
+        float ix = i.x + (mouse.x)*0.1;
+        float iy = i.y + (mouse.y)*0.1;
+        i = vec2( cos( t - ix ) + sin( t + iy ), sin( t - iy ) + cos( t + ix ) ) + p;
+        c += float( n ) / length( vec2( p.x / ( sin( t + i.x ) / 0.3 ), p.y / ( cos( t + i.y ) / 0.3 ) ) ) * 10.0;
+    }
+
+    c /= 100.;
+    c = 2.6 - sqrt( c );
 
 
-	float dist = 10.*distance(vec2(mouse.x, ((1. - mouse.y) - 0.5)*uvRate1.y + 0.5 ),vUv1);
-
-
-	uv1.x = (uv1.x - 0.5)*(1.-progress) + 0.5;
-
-
-
-
-
-
-	if(dist<1.){
-		//rgba1 = vec4(1.,0.,0.,1.);
-		float abs = 1. - dist;
-		float time1 = time * 3.3;
-		float time2 = time * 1.8;
-
-		uv1.x += sin(gl_FragCoord.y * 0.04 + time2) * 0.005 * abs * velocity;
-		uv1.x += sin(gl_FragCoord.y * 0.036 + (time1 * 1.5)) * 0.003 * abs * velocity;
-
-		uv1.y += sin(gl_FragCoord.x * 0.06 + time1) * 0.006 * abs * velocity;
-		uv1.y += sin(gl_FragCoord.x * 0.046 + (time1 * 2.)) * 0.004 * abs * velocity;
-	}
-	vec4 rgba1 = texture2D(texture1,mirrored(uv1));
-
-	if(dist<1.){
-		rgba1 *= 1. + 2.*(1. - dist)*(1. - dist);
-		// rgba1 = vec4(1.,0.,0.,1.);
-	}
-
-	gl_FragColor = rgba1*alpha;
-	// gl_FragColor = vec4(dist);
-
+		vec4 tx = texture2D( img1, vec2(vUv.s, vUv.t)) *
+		texture2D( img1, vec2( vUv.s + cos(c) * mouse.x * 0.02, vUv.t + cos(c) * mouse.y * 0.02 ) )
+		* 0.25;
+		vec4 newTx = vec4(tx.rgb, tx.a * ratio);
+		vec4 ct = c * c * c * newTx;
+		gl_FragColor = texture2D( img1, vec2( vUv.s + c*mouse.x * 0.75, vUv.t +  c*mouse.y * 0.75 ) );
+		gl_FragColor = (ct - newTx * newTx - vec4( tx.rgb * 0.5, tx.a * vPosition.z ))*ratio;
 }
