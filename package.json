@@ -20,6 +20,7 @@
     "react-three": "^0.9.7",
     "react-three-renderer": "^3.2.4",
     "redux": "^4.0.0",
+    "simplex-noise": "^2.4.0",
     "three": "^0.94.0",
     "three-orbit-controls": "^82.1.0"
   },
@@ -43,6 +44,7 @@
     "glslx-loader": "0.0.4",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
     "react-hot-loader": "^4.2.0",

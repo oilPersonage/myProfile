@@ -43,7 +43,7 @@ class Burger extends Component {
     if ( !this.show) {
       TweenMax.to(this.burgerItemTop, 0.3, {rotation: 0, top: 0})
       TweenMax.to(this.burgerItemMiddle, 0, {opacity: 1})
-      TweenMax.to(this.burgerItemBottom, 0.3, {rotation: 0, top: 30, onComplete: () => {this.setState({nextClick: true})
+      TweenMax.to(this.burgerItemBottom, 0.3, {rotation: 0, top: 30, onComplete: () => {this.setState({nextClick: true, show: true})
         }})
     }
   }
@@ -57,7 +57,7 @@ class Burger extends Component {
   }
 
   toggleMenu = () => {
-    if (this.animation) {return}
+    if (this.animation === true) {return}
     if (this.state.nextClick) {
       this.show && this.props.animationMenu()
       this.setState({isOpen: !this.state.isOpen, nextClick: false})
@@ -66,7 +66,7 @@ class Burger extends Component {
   }
 
   render() {
-    console.log(this.state.nextClick)
+    console.log(this.state, this.show)
     const isOpen = this.props.menu.show
     return (
       <div className="burgerBox" onClick={this.toggleMenu}>

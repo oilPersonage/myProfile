@@ -25,25 +25,21 @@ class NavigationDots extends Component {
             : active === this.dotsCount - 1 && deltaY === 1
                 ? this.dotsCount - 1
                 : active + deltaY
-        if (!(active === 1 && deltaY === -1) && !(active === this.dotsCount - 1 && deltaY === 1) ) PubSub.publish('gotoSlide', {from: this.state.active, to: Goto})
+        if (!(active === 1 && deltaY === -1) && !(active === this.dotsCount - 1 && deltaY === 1) )  this.props.toggleMenu({from: this.state.active, to: Goto})
       }
     })
-    PubSub.subscribe('gotoSlide', (msg, data) => {
-      this.props.toggleMenu(data)
-      this.onClick(data.to)
-    });
   }
 
-  onClickPubSub = (e) => {
+  componentWillReceiveProps(next) {
     if (this.state.animation) {  // выключил клик при анимации
-      const {num} = e.target.dataset
-      PubSub.publish('gotoSlide', {from: this.state.active, to: +num});
+      this.setState({animation: false})
+      this.animation(next.scroll.to)
     }
   }
 
-  onClick = (num) => {
-    this.setState({animation: false})
-    this.animation(num)
+  onClickPubSub = (e) => {
+    this.num = e.target.dataset.num
+    this.props.toggleMenu({from: this.state.active, to: +this.num})
   }
 
   animation = (num) => {

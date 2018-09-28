@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {TweenLite} from "gsap";
 import {connect} from "react-redux";
 import NavigationDots from '../components/Navigation/NavigationDots';
+import Canvas from '../components/Navigation/Canvas/CircleCanvas';
 
 import image from '../images/1.jpg'
 
@@ -26,7 +27,7 @@ class Works extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.scroll !== this.state.scroll && this.state.scrollComplite) {
+    if (nextProps.scroll !== this.state.scroll && this.state.scrollComplite && this.props.menu.active === 2) {
       this.setState({scroll: nextProps.scroll});
       this.scrollAnimation(nextProps.scroll);
     }
@@ -65,12 +66,14 @@ class Works extends Component {
              }}>
           <NavigationDots/>
           <div className="scrollContainer" style={{transform: `translateY(${this.state.transform}px)`}}>
-            <div className="containerBlock containerBlockOne" ref={node => this.block = node} style={{backgroundImage: `url(${image})`,}}>
-            </div>
+            <div className="containerBlock containerBlockOne" ref={node => this.block = node} style={{backgroundImage: `url(${image})`,}} />
             <div className="containerBlock containerBlockTwo">
               2
               <div className="containerBlockTwo-absolute"
                    style={{backgroundPositionY: `-${window.innerHeight - 1}px`}}/>
+
+              <Canvas />
+
               <div className="containerBlockTwo-bottom"/>
             </div>
             <div className="containerBlock containerBlockThree">3</div>
@@ -82,7 +85,7 @@ class Works extends Component {
 }
 
 function mapStateToProps(state) {
-  return {scroll: state.scroll};
+  return {scroll: state.scroll, menu: state.menu};
 }
 
 function mapDispatchToProps(dispatch) {

@@ -8,13 +8,7 @@ import { Provider } from 'react-redux';
 
 import store from '../store/store';
 // HEAD components
-import Contacts from '../Pages/Contacts';
-import Home from '../Pages/Home/Home';
-import Work from '../Pages/Works';
-
-// Small Components
-import Burger from './Navigation/Burger';
-import NavigationContainer from './Navigation/Navigation/NavigationContainer';
+import Full from '../contain/Full';
 
 
 class App extends Component {
@@ -25,21 +19,20 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <HashRouter>
-          <Switch>
-            <div className="RouterContainer">
-              <Burger />
-              <NavigationContainer />
-              <Route exact path="/" component={Home} />
-              <Route path="/works" component={Work} />
-              <Route path="/contacts" component={Contacts} />
-              {/* <Canvas /> */}
-            </div>
-          </Switch>
-        </HashRouter>
+        <Full />
       </Provider>
     );
   }
 }
+
+{ /* <HashRouter> */ }
+{ /* <Switch> */ }
+{ /* <div className="RouterContainer"> */ }
+{ /* /!* <Burger /> *!/ */ }
+{ /* <Route to="/" component={Full} /> */ }
+{ /* /!*</div>*!/ */ }
+{ /* /!*</Switch>*!/ */ }
+{ /* /!*</HashRouter>*!/ */ }
+{ /* /!*</Provider>*!/ */ }
 
 export default App;
