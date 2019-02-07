@@ -19,7 +19,8 @@ void main()	{
     float map = texture2D(map, vec2(vUv2)).r;
     vec4 fr = texture2D(front, vec2(vUv2));
 	float c = 0.;
-    for(int n = 0; n<4; n++){
+
+    for(int n = 0; n<4; n++) {
         float t = ( 1.0 - ( 8.0 / float( n + 10 ) ) ) * time*0.3;
         float ix = i.x + mouse.x;
         float iy = i.y + mouse.y;
@@ -35,6 +36,6 @@ void main()	{
     vec4 newTx = vec4(tx.rgb, tx.a * ratio);
     vec4 ct = c * c * c * newTx;
     gl_FragColor = texture2D( img, vec2( vUv.s + c*mouse.x * 0.75, vUv.t +  c*mouse.y * 0.75 ) );
-    gl_FragColor = (ct - newTx * newTx - vec4( tx.rgb * 0.5, tx.a * vPosition.z ))*ratio+vec4(fr.rgb-fr.rgb*0.5, fr.a = 1.);
-//    gl_FragColor = fr;
+//    gl_FragColor = (ct - newTx * newTx - vec4( tx.rgb * 0.5, tx.a * vPosition.z ))*ratio+vec4(fr.rgb-fr.rgb*0.15, fr.a = 1.);
+    gl_FragColor = fr;
 }
