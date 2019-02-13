@@ -2,21 +2,18 @@ import React, {Component} from 'react';
 import * as THREE from 'three';
 import {TimelineMax, TweenMax, Power3, Power1} from 'gsap';
 import fragment from './WebGL/fragment.glsl';
+import fragmentTwo from './WebGL/twoFregment/fragment.glsl';
 import vertex from './WebGL/vertex.glsl';
+import vertex2 from './WebGL/twoFregment/vertex.glsl';
 
-import img1 from '../../images/1.jpg';
-import img2 from '../../images/bg2.jpg';
-import img3 from '../../images/bg3.jpg';
+import img1 from '../../images/bg2.jpg';
+import img2 from '../../images/bg3.jpg';
 
-import frontImg from '../../images/3k.jpg';
-import frontImg2 from '../../images/2.png';
-
-import map3 from '../../images/3mask.jpg';
-import map2 from '../../images/2mask.jpg'
+import front1 from '../../images/2.png'
+import front2 from '../../images/3.png'
 
 import PubSub from 'pubsub-js'
-// import font from '../../fonts/Roboto_Condensed/Roboto Condensed_Bold.json';
-import font from '../../fonts/Pacifico/Pacifico_Regular.json';
+import font from '../../fonts/Roboto_Condensed/RobotoCondensed_Bold.json';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -27,11 +24,12 @@ let camera,
     renderer,
     maps,
     fronts,
-    geometry1,
+    twoMaterial,
     material,
+    textMesh,
     plane,
-    tex1,
-    tex2;
+    plane2,
+    plane3;
 const destination = {x: 0, y: 0};
 let textures = [];
 
@@ -61,7 +59,8 @@ class Home extends Component {
     document.body.addEventListener('click', this.onClick)
 
     const tl = new TimelineMax();
-    this.text.map(item => tl.staggerFromTo(`.${item}`, 0.2, {opacity: 0, y: -100}, {opacity: 1, y: 0, ease: Power1.easeOut }, 0.1))
+    setTimeout(() => this.text.map(item => tl.staggerFromTo(`.${item}`, 0.2, {opacity: 0, y: -100}, {opacity: 1, y: 0, ease: Power1.easeOut }, 0.1)), 3000)
+
 
     window.addEventListener('wheel', (e) => {
       const {active, animation} = this.state
@@ -93,7 +92,6 @@ class Home extends Component {
     scene = new THREE.Scene();
 
     renderer = new THREE.WebGLRenderer();
-
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     const container = this.cont;
@@ -107,30 +105,21 @@ class Home extends Component {
     camera.position.set(0, 0, 1);
 
 
-    controls = new OrbitControls(camera, renderer.domElement);
+    // controls = new OrbitControls(camera, renderer.domElement);
 
     textures = [
-      THREE.ImageUtils.loadTexture(img3),
+      THREE.ImageUtils.loadTexture(img1),
       THREE.ImageUtils.loadTexture(img2),
-      // THREE.ImageUtils.loadTexture(img1),
     ];
-    // textures[2].anisotropy = renderer.getMaxAnisotropy();
-    textures[0].anisotropy = renderer.getMaxAnisotropy();
     textures[1].anisotropy = renderer.getMaxAnisotropy();
+    textures[0].anisotropy = renderer.getMaxAnisotropy();
 
     fronts = [
-      THREE.ImageUtils.loadTexture(frontImg),
-      THREE.ImageUtils.loadTexture(frontImg2)
+      THREE.ImageUtils.loadTexture(front1),
+      THREE.ImageUtils.loadTexture(front2)
     ]
     fronts[0].anisotropy = renderer.getMaxAnisotropy();
     fronts[1].anisotropy = renderer.getMaxAnisotropy();
-
-    maps = [
-      THREE.ImageUtils.loadTexture(map3),
-      THREE.ImageUtils.loadTexture(map2)
-    ]
-    maps[0].anisotropy = renderer.getMaxAnisotropy();
-    maps[1].anisotropy = renderer.getMaxAnisotropy();
 
     material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
@@ -139,53 +128,98 @@ class Home extends Component {
         opacity: {type: 'f', value: 1},
         ratio: {type: 'f', value: 1},
         uvRate: {type: 'v2', value: new THREE.Vector2(1,1)},
-        progress: {type: 'f', value: -0.05},
+        click: {type: 'v2', value: new THREE.Vector2(-1.1, -1)},
+        progress: {type: 'f', value: 0},
         hWave: {type: 'f', value: 0.02},
         waveLength: {type: 'f', value: 3},
         mouse: {type: 'v2', value: new THREE.Vector2()},
         resolution: {type: 'v2', value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
         img: {type: 't', value: textures[0]},
-        front: {type: 't', value: fronts[0]},
-        map: {type: 't', value: maps[0]},
+        nextImg: {type: 't', value: textures[1]},
       },
       // wireframe: true,
       vertexShader: vertex,
       fragmentShader: fragment,
     });
+    twoMaterial = new THREE.ShaderMaterial({
+      side: THREE.DoubleSide,
+      transparent: 0,
+      uniforms: {
+        time: {type: 'f', value: 0},
+        opacity: {type: 'f', value: 1},
+        ratio: {type: 'f', value: 1},
+        click: {type: 'v2', value: new THREE.Vector2(-1.1, -1)},
+        uvRate: {type: 'v2', value: new THREE.Vector2(1,1)},
+        progress: {type: 'f', value: 0},
+        hWave: {type: 'f', value: 0.02},
+        waveLength: {type: 'f', value: 3},
+        mouse: {type: 'v2', value: new THREE.Vector2()},
+        resolution: {type: 'v2', value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
+        front: {type: 't', value: fronts[0]},
+        nextFront: {type: 't', value: fronts[1]},
+      },
+      // wireframe: true,
+      vertexShader: vertex2,
+      fragmentShader: fragmentTwo,
+    });
+
+    const loader = new THREE.FontLoader()
+    loader.load('./fonts/Roboto_Condensed/RobotoCondensed_Bold.json', ft => {
+      const textGeometry = new THREE.TextGeometry( 'Patrick Sullivan', {
+        font: ft,
+        size: 80,
+        height: 5,
+        curveSegments: 12,
+        bevelEnabled: true,
+        bevelThickness: 10,
+        bevelSize: 8,
+        bevelSegments: 5
+      } );
+
+      const textMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+      textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.position.set( 0, 0, 0 );
+      console.log({textMesh})
+    })
 
     plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 64, 64), material);
+    plane2 = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 64, 64), twoMaterial);
     scene.add(plane);
+    scene.add(plane2);
     this.resize();
   }
 
   onClick = (e) => {
-    if (e.target.className === "navElem") return
     if (this.animating) return;
     this.animating = 1;
     this.counter = (this.counter + 1) % textures.length;
-    this.text.map(item =>
-        TweenMax.staggerTo(`.${item}`, 0.4, {opacity: 0, y: -50, ease: Power1.easeOut, onComplete: () => {
-            TweenMax.staggerTo(`.${item}`, 0.2, {opacity: 1, y: 0, ease: Power1.easeOut }, 0.1)
-          } }, 0.1)
-    )
-
-    const tl = new TimelineMax({
-      onComplete: () => {
-        this.animating = 0;
-      }
-    });
+    this.counter2 = (this.counter + 1) % textures.length;
+    const tl = new TimelineMax({});
+    const x = (e.clientX - ww / 2) / (ww / 2);
+    const y = (e.clientY - wh / 2) / (wh / 2);
     tl
-        .to(material.uniforms.progress, 4, { ease: Power3.easeOut, value: 1.05, onComplete: () => {
-          material.uniforms.img.value = textures[this.counter],
-          material.uniforms.map.value = maps[this.counter],
-          material.uniforms.front.value = fronts[this.counter]
+        .to(twoMaterial.uniforms.click, 0, {value: {x, y}})
+        .to(material.uniforms.click, 0, {value: {x, y}})
+        .to(twoMaterial.uniforms.progress, 2, {value: 1, onComplete: () => {
+            twoMaterial.uniforms.progress.value = 0;
+            twoMaterial.uniforms.front.value = fronts[this.counter]
+            twoMaterial.uniforms.nextFront.value = fronts[this.counter2]
+            twoMaterial.uniforms.click.value = {x: -2, y: -2}
           }})
-        .to(material.uniforms.progress, 0, {value: -0.05})
+        .to(material.uniforms.progress, 2, {value: 1, onComplete: () => {
+            material.uniforms.progress.value = 0;
+            this.animating = 0;
+            material.uniforms.img.value = textures[this.counter]
+            material.uniforms.nextImg.value = textures[this.counter2]
+            material.uniforms.click.value = {x: -2, y: -2}
+          }}, 0)
   };
 
   renderWGL = () => {
     material.uniforms.mouse.value.x += (destination.x - material.uniforms.mouse.value.x) * 0.05;
     material.uniforms.mouse.value.y += (destination.y - material.uniforms.mouse.value.y) * 0.05;
+    twoMaterial.uniforms.mouse.value.y += (destination.y - twoMaterial.uniforms.mouse.value.y) * 0.05;
+    twoMaterial.uniforms.mouse.value.x += (destination.x - twoMaterial.uniforms.mouse.value.x) * 0.05;
 
     renderer.render(scene, camera);
   }
@@ -206,18 +240,22 @@ class Home extends Component {
       const y = 1 + 1 * d
       const he = prop + (1 - h/w) - 0.08
 
-      camera.fov = 2 * (180 / Math.PI) * Math.atan(he / (2 * dist))
+      camera.fov = 2 * (180 / Math.PI) * Math.atan(he / (2 * dist)) * 1.15
       material.uniforms.uvRate.value.y = h/w * y
       material.uniforms.uvRate.value.x = 1
+      twoMaterial.uniforms.uvRate.value.y = h/w * y
+      twoMaterial.uniforms.uvRate.value.x = 1
       plane.scale.x = w/h
+      plane2.scale.x = w/h
     } else {
-      camera.fov = 2 * (180 / Math.PI) * Math.atan(1 / (2 * dist))
+      camera.fov = 2 * (180 / Math.PI) * Math.atan(1 / (2 * dist)) * 1.15
       material.uniforms.uvRate.value.y = 1
       material.uniforms.uvRate.value.x = 0.5
+      twoMaterial.uniforms.uvRate.value.y = 1
+      twoMaterial.uniforms.uvRate.value.x = 0.5
       plane.scale.y = h/w;
+      plane2.scale.y = h/w;
     }
-
-
 
     camera.updateProjectionMatrix();
   }
@@ -225,8 +263,9 @@ class Home extends Component {
   animate = () => {
     this.time += 0.05;
 
-
+    // console.log(material.uniforms.mouse.value)
     material.uniforms.time.value = this.time;
+    twoMaterial.uniforms.time.value = this.time;
     requestAnimationFrame(this.animate);
     this.renderWGL();
   }
@@ -248,9 +287,9 @@ class Home extends Component {
   render() {
     this.text = ["создаю","непоторимые", "ПОРТФОЛИО"]
     return (
-        <div style={{display: "inline-block"}}>
+        <div className='HomeBox'>
           <div className="titleHome" ref={node => this.title = node}>
-            {/*{this.text.map((item,index) => <div key={index} className={`title${index}`}>{this.split(item)}</div>)}*/}
+            {this.text.map((item,index) => <div key={index} className={`title${index}`}>{this.split(item)}</div>)}
             {/*<svg>*/}
               {/*<svg height="100" width="">*/}
                 {/*<line x1="0" y1="0" x2="0" y2="200" style="stroke:rgb(255,0,0);stroke-width:2" />*/}
@@ -258,6 +297,8 @@ class Home extends Component {
             {/*</svg>*/}
           </div>
           <div className="containerHome" ref={node => this.cont = node}/>
+          <img src={front1} alt=""/>
+          <img src={front2} alt=""/>
         </div>
     );
   }

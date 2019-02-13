@@ -31,10 +31,10 @@ void main() {
 
     vec2 st = gl_Position.xy/resolution;
     float prog = 0.;
-    if ((position.x + 0.5 < progress + 0.05) && (position.x + 0.5 > progress - 0.05)) {
-        prog = plot(position.x +0.5, progress)-0.95;
+//    if ((position.x + 0.5 < progress + 0.05) && (position.x + 0.5 > progress - 0.05)) {
+//        prog = plot(position.x +0.5, progress)-0.95;
 //        prog = 1.;
-    }
+//    }
 
-    gl_Position = projectionMatrix * modelViewMatrix * vec4( position.x, position.y, prog, 1.0 );
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position.x, position.y, 0., 1.0 );
 }

@@ -27,6 +27,10 @@ module.exports = {
         },
       },
       {
+        test: /\.font\.(js|json)$/,
+        loader: "style!css!fontgen"
+      },
+      {
         test: /\.(glsl|vs|fs)$/,
         loader: 'shader-loader',
       },
@@ -81,6 +85,7 @@ module.exports = {
   devServer: {
     port: 3001,
     hot: true,
+    contentBase: './src/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.png', 'json'],
