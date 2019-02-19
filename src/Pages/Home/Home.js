@@ -8,9 +8,13 @@ import vertex2 from './WebGL/twoFregment/vertex.glsl';
 
 import img1 from '../../images/bg2.jpg';
 import img2 from '../../images/bg3.jpg';
+import img3 from '../../images/bg4.jpg';
+import img4 from '../../images/bg5.jpg';
 
 import front1 from '../../images/2.png'
 import front2 from '../../images/3.png'
+import front3 from '../../images/front3.png'
+import front4 from '../../images/front5.png'
 
 import PubSub from 'pubsub-js'
 import font from '../../fonts/Roboto_Condensed/RobotoCondensed_Bold.json';
@@ -40,10 +44,18 @@ const wh = window.innerHeight;
 class Home extends Component {
   constructor(props) {
     super(props)
+    this.text = [
+      [<div key='1' className="title0 oneElem">создаю не повторимые</div>, <div key='21' className="title2">ПОРТФОЛИО</div>],
+      [<div key='2' className="title0">захватывающая</div>, <div key='22' className="title2">АНИМАЦИЯ</div>],
+      [<div key='3' className="title0 threeHomeText">индивидуальный подход к каждому</div>, <div key='23' className="title2 threeHomeText">КЛИЕНТУ</div>],
+      [<div key='4' className="title0">реализую любую</div>, <div key='24' className="title2">ВАШУ ИДУЮ</div>]
+    ]
     this.state = {
+      currentText: this.text[0],
       animationComplite: true,
       title: <div className="titleHome" ref={node => this.title = node}></div>
     }
+
   }
 
   componentDidMount() {
@@ -58,8 +70,6 @@ class Home extends Component {
     this.animating = 0;
     document.body.addEventListener('click', this.onClick)
 
-    const tl = new TimelineMax();
-    setTimeout(() => this.text.map(item => tl.staggerFromTo(`.${item}`, 0.2, {opacity: 0, y: -100}, {opacity: 1, y: 0, ease: Power1.easeOut }, 0.1)), 3000)
 
 
     window.addEventListener('wheel', (e) => {
@@ -110,23 +120,30 @@ class Home extends Component {
     textures = [
       THREE.ImageUtils.loadTexture(img1),
       THREE.ImageUtils.loadTexture(img2),
+      THREE.ImageUtils.loadTexture(img3),
+      THREE.ImageUtils.loadTexture(img4),
     ];
     textures[1].anisotropy = renderer.getMaxAnisotropy();
     textures[0].anisotropy = renderer.getMaxAnisotropy();
+    textures[2].anisotropy = renderer.getMaxAnisotropy();
+    textures[3].anisotropy = renderer.getMaxAnisotropy();
 
     fronts = [
       THREE.ImageUtils.loadTexture(front1),
-      THREE.ImageUtils.loadTexture(front2)
+      THREE.ImageUtils.loadTexture(front2),
+      THREE.ImageUtils.loadTexture(front3),
+      THREE.ImageUtils.loadTexture(front4)
     ]
     fronts[0].anisotropy = renderer.getMaxAnisotropy();
     fronts[1].anisotropy = renderer.getMaxAnisotropy();
+    fronts[2].anisotropy = renderer.getMaxAnisotropy();
+    fronts[3].anisotropy = renderer.getMaxAnisotropy();
 
     material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
       uniforms: {
         time: {type: 'f', value: 0},
         opacity: {type: 'f', value: 1},
-        ratio: {type: 'f', value: 1},
         uvRate: {type: 'v2', value: new THREE.Vector2(1,1)},
         click: {type: 'v2', value: new THREE.Vector2(-1.1, -1)},
         progress: {type: 'f', value: 0},
@@ -147,7 +164,6 @@ class Home extends Component {
       uniforms: {
         time: {type: 'f', value: 0},
         opacity: {type: 'f', value: 1},
-        ratio: {type: 'f', value: 1},
         click: {type: 'v2', value: new THREE.Vector2(-1.1, -1)},
         uvRate: {type: 'v2', value: new THREE.Vector2(1,1)},
         progress: {type: 'f', value: 0},
@@ -190,6 +206,7 @@ class Home extends Component {
   }
 
   onClick = (e) => {
+    if (e.target !== this.cont.children[0] && !e.target.classList.contains('title0') && !e.target.classList.contains('title2') ) return
     if (this.animating) return;
     this.animating = 1;
     this.counter = (this.counter + 1) % textures.length;
@@ -213,6 +230,7 @@ class Home extends Component {
             material.uniforms.nextImg.value = textures[this.counter2]
             material.uniforms.click.value = {x: -2, y: -2}
           }}, 0)
+    this.setState({currentText: this.text[this.counter]})
   };
 
   renderWGL = () => {
@@ -277,19 +295,21 @@ class Home extends Component {
     destination.y = x;
   }
 
-  split = (text) => {
-    text = text.split('')
-    const newArr = []
-    text.map((item, index) => newArr.push(<div key={index} className={`itemTitleHome ${text.join('')}`}>{item}</div>))
-    return newArr
-  }
+
+  // split = (text) => {
+  //   text = text.split('')
+  //   const newArr = []
+  //   text.map((item, index) => newArr.push(<div key={index} className={`itemTitleHome ${text.join('')}`}>{item}</div>))
+  //   console.log(newArr)
+  //   return newArr
+  // }
 
   render() {
-    this.text = ["создаю","непоторимые", "ПОРТФОЛИО"]
+    const {currentText} = this.state
     return (
         <div className='HomeBox'>
-          <div className="titleHome" ref={node => this.title = node}>
-            {this.text.map((item,index) => <div key={index} className={`title${index}`}>{this.split(item)}</div>)}
+          <div className={`titleHome anim${this.text.indexOf(this.state.currentText)}`} ref={node => this.title = node}>
+            {currentText}
             {/*<svg>*/}
               {/*<svg height="100" width="">*/}
                 {/*<line x1="0" y1="0" x2="0" y2="200" style="stroke:rgb(255,0,0);stroke-width:2" />*/}

@@ -13,16 +13,20 @@ body
   min-width: 100vw
   min-height: 100vh
   height: 100%
+
 .containerComponent
   display: flex
+
 .contComp
   transform-origin: top
   display: flex
   width: 100vw
+
 .containerHome
   position: relative
   min-width: 100vw
   width: 100%
+
 .navBox
   position: fixed
   display: flex
@@ -32,9 +36,11 @@ body
   right: 117px
   z-index: 5
   text-align: center
+
 .HomeBox
   display: inline-block
   max-width: 100vw
+
 .navItem
   position: relative
   z-index: 3
@@ -59,21 +65,21 @@ body
     right: 0
     display: block
     background-color: #fff
-    //&:after
-    //  content: none
-  //&:after
-  //  position: absolute
-  //  content: ""
-  //  right: -3px
-  //  height: 5px
-  //  width: 5px
-  //  background-color: #fff
-  //  border-radius: 50%
-  //  top: 50%
-  //  transform: translateY(-50%)
-  //&:last-child
-  //  &:after
-  //    content: none
+//&:after
+//  content: none
+//&:after
+//  position: absolute
+//  content: ""
+//  right: -3px
+//  height: 5px
+//  width: 5px
+//  background-color: #fff
+//  border-radius: 50%
+//  top: 50%
+//  transform: translateY(-50%)
+//&:last-child
+//  &:after
+//    content: none
 .AbsoluteBG
   width: 130%
   transform: translateX(-100%)
@@ -84,10 +90,12 @@ body
   position: fixed
   background-color: #fff
   padding: 0 40px
+
 .AbsoluteBGExtra
   background-color: red
   width: 100%
   height: 100%
+
 .burgerBox
   position: fixed
   top: 50%
@@ -233,11 +241,12 @@ body
     width: 100%
     height: 100%
     background-color: #0f111c
+
 .titleHome
   user-select: none
   position: absolute
-  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5)
-  top: calc(100vh * 0.4)
+  //text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5)
+  top: calc(100vh * 0.3)
   z-index: 2
   right: 10%
   align-items: flex-end
@@ -252,28 +261,110 @@ body
   div
     display: flex
   .title2
-    font-family: Merriweather !important;
-    margin-top: 110px
+    font-family: Merriweather !important
     font-size: 7rem
+
 .itemTitleHome
   opacity: 0
-.title0, .title1
-  font-family: Amatic
+
+.title0
+  padding-bottom: 10px
+  border-bottom: 1px solid #fff
+  text-transform: uppercase
+  font-size: 26px
+  line-height: 1.3
+  opacity: 0
+  position: relative
+  font-family: Merriweather !important
+  animation: TitleAnim 1s ease-out 0.5s forwards
+
+.title1
+  font-family: Merriweather !important
+  opacity: 0
+  position: relative
+  animation: TitleAnim 1s ease-out 1s forwards
+
+.title2
+  line-height: 1.3
+  opacity: 0
+  position: relative
+  animation: TitleAnim 1s ease-out 1.5s forwards
+
+@keyframes TitleAnim
+  0%
+    top: -100px
+    opacity: 0
+  100%
+    top: 0
+    opacity: 1
+@keyframes TitleAnim1
+  0%
+    left: -100px
+    opacity: 0
+  100%
+    left: 0
+    opacity: 1
+@keyframes TitleAnim2
+  0%
+    right: -100px
+    opacity: 0
+  100%
+    right: 0
+    opacity: 1
+
+.titleHome.anim1
+  color: #7d3828
+  text-shadow: none
+  .title0
+    border-bottom: 0.5px solid #7d3828
+    text-shadow: 0 1px 0px rgba(0,0,0,.3)
+    animation: TitleAnim2 1s ease-out 0.5s forwards
+  .title2
+    animation: TitleAnim2 1s ease-out 1s forwards
+    text-shadow: 0 1px 0px rgba(0,0,0,.3)
+.titleHome.anim2
+  top: calc(100vh * 0.3)
+  right: auto
+  left: 10%
+  align-items: flex-start
+  .title0
+    animation: TitleAnim1 1s ease-out 0.5s forwards
+    text-shadow: 0 1px 0px rgba(0,0,0,.3)
+  .title2
+    animation: TitleAnim1 1s ease-out 1s forwards
+    text-shadow: 0 1px 0px rgba(0,0,0,.3)
+.titleHome.anim3
+  top: calc(100vh * 0.3)
+  color: #234300
+  right: auto
+  left: 10%
+  align-items: flex-start
+  .title0
+    border-bottom: 0.5px solid #234300
+    text-shadow: 0 1px 0px rgba(0,0,0,.3)
+    animation: TitleAnim1 1s ease-out 0.5s forwards
+  .title2
+    animation: TitleAnim1 1s ease-out 1s forwards
+    text-shadow: 0 1px 0px rgba(0,0,0,.3)
+
 .contactsContainer
   display: flex
+
 .contactImage
   width: 100vw
   img
     width: 100vw
     height: 100vh
     object-fit: cover
+
 .contactBG
   position: absolute
   top: 0
   left: 0
   width: 100vw
   height: 100vh
-  background-color: rgba(0,0,0,0.7)
+  background-color: rgba(0, 0, 0, 0.7)
+
 .contactTextBlock
   position: absolute
   top: 0
@@ -287,5 +378,6 @@ body
     text-decoration: none
     text-transform: none
     color: #fff
+
 .leftBlockContact
   border-left: 1px solid white
