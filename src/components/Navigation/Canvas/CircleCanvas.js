@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import SimplexNoise from 'simplex-noise'
 import Mouse from './mouse'
 import Ball from './balls'
+import logo from '../../../images/KateLogo.svg'
 const lines = []
 
 
@@ -12,7 +13,7 @@ class CircleCanvas extends Component {
 
     this.state = {
       radius: 200,
-      points: 200,
+      points: 150,
       lineNumbers: 3,
       width: document.body.clientWidth / 2,
       height: document.body.clientHeight / 2,
@@ -22,11 +23,16 @@ class CircleCanvas extends Component {
       balls: [],
       show: this.props.menu.show,
     };
+    this.inX = 0;
+    this.inY = 0;
     this.time = 0;
     this.mouseX=0;
     this.mouseY=0;
     this.inercX = 0;
     this.inercY = 0;
+
+    this.logo = new Image()
+    this.logo.src = logo
   }
 
   componentWillReceiveProps() {
@@ -99,11 +105,16 @@ class CircleCanvas extends Component {
     this.ctx = this.canvas.getContext('2d')
     this.ctx.clearRect(0, 0, width * 2, height * 2)
     this.ctx.fillStyle = "rgba(0,0,0,.98)"
+
+
+    this.inX += 0.1 * (this.pos.x - this.inX)
+    this.inY += 0.1 * (this.pos.y - this.inY)
+
     this.mouse.setPos(this.pos.x, this.pos.y, 20, 1)
-    this.mouse.draw(this.ctx)
+    this.mouse.draw(this.ctx, this.time, true)
     this.state.balls.forEach(ball => {
-      ball.think(this.pos)
-      ball.draw(this.ctx, this.time)
+      ball.think(this.pos, this.inX, this.inY)
+      ball.draw(this.ctx, this.time, false, this.pos)
     })
     for (let i =0; i < this.state.lineNumbers; i++) {
       this.ctx.strokeStyle = i === this.state.lineNumbers - 1
@@ -128,10 +139,8 @@ class CircleCanvas extends Component {
         // this.ctx.stroke()
       }
     }
-    this.ctx.fillStyle = "white"
-    this.ctx.textAlign = 'center'
-    this.ctx.font="100 80px Oswald";
-    this.ctx.fillText("SPACE" , window.innerWidth / 2 , window.innerHeight / 2 + 20)
+    this.ctx.drawImage(this.logo, window.innerWidth / 2 - 75 + this.inercX * 20, window.innerHeight / 2 - 60 + this.inercY * 20 , 150, 120);
+    // this.ctx.fillText("SPACE" )
   }
 
   raf = () => {

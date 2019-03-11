@@ -18,14 +18,15 @@ export default class Full extends Component {
   }
 
   render() {
+    const width = window.innerWidth > 998
     return (
       <div className="containerComponent">
-        <Navigation {...this.props} />
+        {width && <Navigation {...this.props} />}
         {/* <Switch> */}
         <div className="contComp">
-          <Home />
-          <Work />
-          <Contacts />
+          {width && <Home />}
+          {width && <Work />}
+          <Contacts width={width} />
         </div>
       </div>
     );

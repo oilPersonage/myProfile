@@ -22,7 +22,8 @@ class Navigation extends Component {
 
   componentDidMount() {
     this.cont = this[this.state.active].getBoundingClientRect();
-    this.setState({ width: this.cont.width - 20, left:  this.cont.x - this.menu.getBoundingClientRect().x + 10});
+    console.log(this.cont)
+    this.setState({ width: this.cont.width - 35, left:  this.cont.x - this.menu.getBoundingClientRect().x + 10});
   }
 
   componentWillReceiveProps(next) {
@@ -41,6 +42,7 @@ class Navigation extends Component {
       TweenLite.to(body, 0.5, {skewX: -5})
       TweenLite.to(body, 0.5, {skewX: 0, delay: 0.5})
     }
+    console.log(this[this.event.dataset.to].clientWidth)
     this.setState({
       active: this.event.dataset.to,
       left: this.cont.x - menu.x + 10,
@@ -57,19 +59,18 @@ class Navigation extends Component {
 
   render() {
     const { widthMenu, heightMenu } = this.state;
-    const transformMenu = `translate(${-widthMenu / 2}px, ${-heightMenu / 2}px)`;
+    // const transformMenu = `translate(${-widthMenu / 2}px, ${-heightMenu / 2}px)`;
     // navBox
+    console.log(this.state.width)
     const style = {
       transition: 'all 0.3s ease',
       width: this.state.width,
       left: this.state.left,
     };
-
     return (
       <div
         className="navBox"
         ref={node => this.menu = node}
-        style={{ opacity: 1, transform: transformMenu, width: widthMenu }}
       >
         <div
           className="navItem active"

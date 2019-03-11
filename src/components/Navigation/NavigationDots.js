@@ -91,7 +91,6 @@ class NavigationDots extends Component {
           <div ref={node => this.animateItem = node} className="dotAnimateItem"/>
           <div data-num={1} className={`dotItem ${active === 1 ? 'active' : false}`} onClick={this.onClickPubSub}/>
           <div data-num={2} className={`dotItem ${active === 2 ? 'active' : false}`} onClick={this.onClickPubSub}/>
-          <div data-num={3} className={`dotItem ${active === 3 ? 'active' : false}`} onClick={this.onClickPubSub}/>
         </div>
     );
   }

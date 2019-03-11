@@ -17,7 +17,7 @@ import front3 from '../../images/front3.png'
 import front4 from '../../images/front5.png'
 
 import PubSub from 'pubsub-js'
-import font from '../../fonts/Roboto_Condensed/RobotoCondensed_Bold.json';
+import Svg from '../../utils/logotype'
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -45,12 +45,14 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.text = [
-      [<div key='1' className="title0 oneElem">создаю не повторимые</div>, <div key='21' className="title2">ПОРТФОЛИО</div>],
+      [<div key='1' className="title0 oneElem">создаю неповторимые</div>, <div key='21' className="title2">ПОРТФОЛИО</div>],
       [<div key='2' className="title0">захватывающая</div>, <div key='22' className="title2">АНИМАЦИЯ</div>],
       [<div key='3' className="title0 threeHomeText">индивидуальный подход к каждому</div>, <div key='23' className="title2 threeHomeText">КЛИЕНТУ</div>],
       [<div key='4' className="title0">реализую любую</div>, <div key='24' className="title2">ВАШУ ИДУЮ</div>]
     ]
     this.state = {
+      loading: true,
+      progress: 0,
       currentText: this.text[0],
       animationComplite: true,
       title: <div className="titleHome" ref={node => this.title = node}></div>
@@ -58,7 +60,28 @@ class Home extends Component {
 
   }
 
+  loadingImages = () => {
+    const arrImg = [img1, img2, img3, img4, front1, front2, front3, front4]
+    let index = 0
+    arrImg.map((item) => {
+      const img = new Image();
+
+      img.onload = () => {
+        index += 1
+        const progress = 100 * (index / arrImg.length)
+        this.setState({progress})
+        if (progress === 100) {
+          this.setState({hide: true})
+          setTimeout(() => this.setState({loading: false}), 1000)
+        }
+      }
+      img.src = item
+    })
+  }
+
   componentDidMount() {
+
+    this.loadingImages()
 
     this.init()
     this.animate();
@@ -71,19 +94,25 @@ class Home extends Component {
     document.body.addEventListener('click', this.onClick)
 
 
-
     window.addEventListener('wheel', (e) => {
       const {active, animation} = this.state
       let deltaY = e.deltaY / 100
-      if (deltaY > 1) {deltaY = 1}
-      if (deltaY < -1) {deltaY = -1}
+      if (deltaY > 1) {
+        deltaY = 1
+      }
+      if (deltaY < -1) {
+        deltaY = -1
+      }
       if (animation) {  // выключил клик при анимации
         const Goto = active === 1 && deltaY === -1
             ? 1
             : active === this.dotsCount - 1 && deltaY === 1
                 ? this.dotsCount - 1
                 : active + deltaY
-        if (!(active === 1 && deltaY === -1) && !(active === this.dotsCount - 1 && deltaY === 1) ) PubSub.publish('gotoSlide', {from: this.state.active, to: Goto})
+        if (!(active === 1 && deltaY === -1) && !(active === this.dotsCount - 1 && deltaY === 1)) PubSub.publish('gotoSlide', {
+          from: this.state.active,
+          to: Goto
+        })
       }
     })
     PubSub.subscribe('gotoSlide', (msg, data) => {
@@ -144,7 +173,7 @@ class Home extends Component {
       uniforms: {
         time: {type: 'f', value: 0},
         opacity: {type: 'f', value: 1},
-        uvRate: {type: 'v2', value: new THREE.Vector2(1,1)},
+        uvRate: {type: 'v2', value: new THREE.Vector2(1, 1)},
         click: {type: 'v2', value: new THREE.Vector2(-1.1, -1)},
         progress: {type: 'f', value: 0},
         hWave: {type: 'f', value: 0.02},
@@ -165,7 +194,7 @@ class Home extends Component {
         time: {type: 'f', value: 0},
         opacity: {type: 'f', value: 1},
         click: {type: 'v2', value: new THREE.Vector2(-1.1, -1)},
-        uvRate: {type: 'v2', value: new THREE.Vector2(1,1)},
+        uvRate: {type: 'v2', value: new THREE.Vector2(1, 1)},
         progress: {type: 'f', value: 0},
         hWave: {type: 'f', value: 0.02},
         waveLength: {type: 'f', value: 3},
@@ -179,25 +208,6 @@ class Home extends Component {
       fragmentShader: fragmentTwo,
     });
 
-    const loader = new THREE.FontLoader()
-    loader.load('./fonts/Roboto_Condensed/RobotoCondensed_Bold.json', ft => {
-      const textGeometry = new THREE.TextGeometry( 'Patrick Sullivan', {
-        font: ft,
-        size: 80,
-        height: 5,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 10,
-        bevelSize: 8,
-        bevelSegments: 5
-      } );
-
-      const textMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
-      textMesh = new THREE.Mesh(textGeometry, textMaterial);
-      textMesh.position.set( 0, 0, 0 );
-      console.log({textMesh})
-    })
-
     plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 64, 64), material);
     plane2 = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 64, 64), twoMaterial);
     scene.add(plane);
@@ -206,7 +216,7 @@ class Home extends Component {
   }
 
   onClick = (e) => {
-    if (e.target !== this.cont.children[0] && !e.target.classList.contains('title0') && !e.target.classList.contains('title2') ) return
+    if (e.target !== this.cont.children[0] && !e.target.classList.contains('title0') && !e.target.classList.contains('title2')) return
     if (this.animating) return;
     this.animating = 1;
     this.counter = (this.counter + 1) % textures.length;
@@ -217,19 +227,23 @@ class Home extends Component {
     tl
         .to(twoMaterial.uniforms.click, 0, {value: {x, y}})
         .to(material.uniforms.click, 0, {value: {x, y}})
-        .to(twoMaterial.uniforms.progress, 2, {value: 1, onComplete: () => {
+        .to(twoMaterial.uniforms.progress, 2, {
+          value: 1, onComplete: () => {
             twoMaterial.uniforms.progress.value = 0;
             twoMaterial.uniforms.front.value = fronts[this.counter]
             twoMaterial.uniforms.nextFront.value = fronts[this.counter2]
             twoMaterial.uniforms.click.value = {x: -2, y: -2}
-          }})
-        .to(material.uniforms.progress, 2, {value: 1, onComplete: () => {
+          }
+        })
+        .to(material.uniforms.progress, 2, {
+          value: 1, onComplete: () => {
             material.uniforms.progress.value = 0;
             this.animating = 0;
             material.uniforms.img.value = textures[this.counter]
             material.uniforms.nextImg.value = textures[this.counter2]
             material.uniforms.click.value = {x: -2, y: -2}
-          }}, 0)
+          }
+        }, 0)
     this.setState({currentText: this.text[this.counter]})
   };
 
@@ -252,27 +266,27 @@ class Home extends Component {
     const dist = camera.position.z - plane.position.z;
     const height = 1;
     camera.fov = 2 * (180 / Math.PI) * Math.atan(height / (2 * dist))
-    if (w/h>1) {
-      const prop = 1080/1920
-      const d = h/w
+    if (w / h > 1) {
+      const prop = 1080 / 1920
+      const d = h / w
       const y = 1 + 1 * d
-      const he = prop + (1 - h/w) - 0.08
+      const he = prop + (1 - h / w) - 0.08
 
       camera.fov = 2 * (180 / Math.PI) * Math.atan(he / (2 * dist)) * 1.15
-      material.uniforms.uvRate.value.y = h/w * y
+      material.uniforms.uvRate.value.y = h / w * y
       material.uniforms.uvRate.value.x = 1
-      twoMaterial.uniforms.uvRate.value.y = h/w * y
+      twoMaterial.uniforms.uvRate.value.y = h / w * y
       twoMaterial.uniforms.uvRate.value.x = 1
-      plane.scale.x = w/h
-      plane2.scale.x = w/h
+      plane.scale.x = w / h
+      plane2.scale.x = w / h
     } else {
       camera.fov = 2 * (180 / Math.PI) * Math.atan(1 / (2 * dist)) * 1.15
       material.uniforms.uvRate.value.y = 1
       material.uniforms.uvRate.value.x = 0.5
       twoMaterial.uniforms.uvRate.value.y = 1
       twoMaterial.uniforms.uvRate.value.x = 0.5
-      plane.scale.y = h/w;
-      plane2.scale.y = h/w;
+      plane.scale.y = h / w;
+      plane2.scale.y = h / w;
     }
 
     camera.updateProjectionMatrix();
@@ -306,21 +320,23 @@ class Home extends Component {
 
   render() {
     const {currentText} = this.state
-    return (
-        <div className='HomeBox'>
-          <div className={`titleHome anim${this.text.indexOf(this.state.currentText)}`} ref={node => this.title = node}>
-            {currentText}
-            {/*<svg>*/}
-              {/*<svg height="100" width="">*/}
-                {/*<line x1="0" y1="0" x2="0" y2="200" style="stroke:rgb(255,0,0);stroke-width:2" />*/}
-              {/*</svg>*/}
-            {/*</svg>*/}
-          </div>
-          <div className="containerHome" ref={node => this.cont = node}/>
-          <img src={front1} alt=""/>
-          <img src={front2} alt=""/>
+    return <React.Fragment>
+      <div className='HomeBox'>
+        <div className={`titleHome anim${this.text.indexOf(this.state.currentText)}`} ref={node => this.title = node}>
+          {currentText}
         </div>
-    );
+        <div className="containerHome" ref={node => this.cont = node}/>
+      </div>
+      {this.state.loading &&
+      <div className={`preloader ${this.state.hide && 'hide'}`}>
+        <div className="svgLogo">
+          {<Svg />}
+          <div className="linePreloader"/>
+          <div className="linePreloaderAbs" style={{width: `${this.state.progress}%`}}/>
+        </div>
+      </div>
+      }
+    </React.Fragment>
   }
 }
 

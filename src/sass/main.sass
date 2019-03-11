@@ -7,7 +7,7 @@ $color-text: #fff
 
 body
   overflow: hidden
-  font-family: "Open Sans", Oswald, Abel, Alfa, Merri, Oswald, Rajd, Sunf, Arial
+  font-family: Oswald, Abel, Alfa, Merri, Oswald, Rajd, Sunf, Arial
   letter-spacing: 5px
   background-color: black
   min-width: 100vw
@@ -183,16 +183,42 @@ body
     position: absolute
     bottom: -1px
     z-index: 99
-    background: whitesmoke
-    clip-path: polygon(100% 0, 0% 100%, 100% 100%)
+    background: #354029
+    clip-path: polygon(100% 62%, 85% 84%, 57% 66%, 40% 92%, 10% 96%, 0% 100%, 100% 100%)
+    left: 0
+    width: 100%
+    height: 200px
+  &-rock
+    position: absolute
+    bottom: -1px
+    z-index: 98
+    background: #172440
+    clip-path: polygon(100% 47%, 89% 0%, 76% 58%, 71% 24%, 64% 69%, 36% 85%, 0% 100%, 100% 100%)
+    left: 0
+    width: 100%
+    height: 200px
+  &-white
+    position: absolute
+    bottom: -1px
+    z-index: 99
+    background: #8e8ca2
+    clip-path: polygon(95% 26%, 89% 0%, 85% 18%, 76% 59%, 71% 24%, 69% 37%,69% 41%, 70% 38%, 71% 39%, 72% 35%, 73% 38%, 76% 59%, 83% 27%, 86% 35%, 89% 28%, 92% 36%, 91% 22%, 95% 26%)
     left: 0
     width: 100%
     height: 200px
 
 .containerBlockThree
-  background: whitesmoke
+  background: #354029
   position: relative
   z-index: 3
+  display: flex
+  justify-content: center
+  align-items: center
+  .title
+    max-width: 600px
+    color: #fff
+    font-family: Merriweather
+    font-size: 60px
 
 .dotsContainer
   position: absolute
@@ -378,6 +404,137 @@ body
     text-decoration: none
     text-transform: none
     color: #fff
-
+.siteComp
+  position: absolute
+  bottom: 30px
+  font-size: 30px
+  color: #ffffff
+  padding: 0 30px
+  text-align: center
 .leftBlockContact
-  border-left: 1px solid white
+  background-color: rgba(0,0,0,.5)
+  width: 300px
+  padding: 30px 15px
+  border-bottom: 1px solid rgba(255, 255, 255, .1)
+  a
+    text-transform: uppercase
+    margin-right: 30px
+    display: flex
+    align-items: center
+    flex-direction: column
+    svg
+      width: 100px
+    &:last-child
+      margin-right: 0
+.contactTextBlock
+  display: flex
+  svg
+    margin-bottom: 30px
+.preloader
+  position: fixed
+  width: 100%
+  height: 100%
+  top: 0
+  background-color: #000
+  left: 0
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 9
+  transition: 0.6s ease-in
+.preloader.hide
+  opacity: 0
+.svgLogo
+  width: 150px
+  transform: translateX(-50%)
+.cls-1
+  fill: #efc18f
+  animation: animLogo1 5s linear infinite
+.cls-2
+  fill: #e09958
+  animation: animLogo2 5s linear infinite
+.cls-3
+  fill: #c67f46
+  animation: animLogo3 5s linear infinite
+.cls-4
+  fill: #ad6c31
+  animation: animLogo4 5s linear infinite
+.cls-5
+  fill: #c67f46
+.cls-6
+  fill: #3f2c23
+.cls-7
+  fill: #efc18f
+  animation: animLogo5 3s linear infinite
+.cls-8
+  fill: #201310
+
+@keyframes animLogo1
+  40%
+    fill: #fff
+  50%, 100%
+    fill: #efc18f
+@keyframes animLogo2
+  30%
+    fill: #fff
+  40%, 100%
+    fill: #e09958
+@keyframes animLogo3
+  20%
+    fill: #fff
+  30%, 100%
+    fill: #c67f46
+@keyframes animLogo4
+  10%
+    fill: #fff
+  20%, 100%
+    fill: #ad6c31
+@keyframes animLogo5
+  0%
+    fill: #fff
+  10%, 100%
+    fill: #efc18f
+.linePreloader
+  width: 100%
+  height: 2px
+  background-color: #636363
+  margin-top: 30px
+.linePreloaderAbs
+  position: absolute
+  bottom: 0
+  left: 0
+  background-color: #fff
+  height: 2px
+  width: 2px
+  transition: 0.5s linear
+//  animation: width 5s ease-in-out forwards
+//@keyframes width
+//  0%
+//    width: 0
+//  100%
+//    width: 100%
+.logotypeContact
+  position: absolute
+  width: 200px
+  height: 180px
+  top: 25%
+  left: 50%
+  transform: translateX(-65%)
+.whiteColor
+  fill: #fff
+
+
+@media only screen and (max-width: 998px)
+  .siteComp
+    font-size: 18px
+    text-transform: uppercase
+  .contactTextBlock
+    flex-direction: column
+  .logotypeContact
+    width: 150px
+    top: 10%
+  .leftBlockContact
+    padding: 15px
+    a
+      svg
+        width: 50px

@@ -64,19 +64,19 @@ class Works extends Component {
                opacity: this.state.imageComplete ? 1 : 0,
                transition: 'opacity 0.3s',
              }}>
-          <NavigationDots/>
+          <NavigationDots />
           <div className="scrollContainer" style={{transform: `translateY(${this.state.transform}px)`}}>
-            <div className="containerBlock containerBlockOne" ref={node => this.block = node} style={{backgroundImage: `url(${image})`,}} />
-            <div className="containerBlock containerBlockTwo">
-              2
-              <div className="containerBlockTwo-absolute"
-                   style={{backgroundPositionY: `-${window.innerHeight - 1}px`}}/>
+            {/*<div className="containerBlock containerBlockOne" ref={node => this.block = node} style={{backgroundImage: `url(${image})`,}} />*/}
+            <div className="containerBlock containerBlockTwo" ref={node => this.block = node}>
 
               <Canvas />
-
-              <div className="containerBlockTwo-bottom"/>
+              <div className="containerBlockTwo-bottom"></div>
+              <div className="containerBlockTwo-rock"></div>
+              <div className="containerBlockTwo-white"></div>
             </div>
-            <div className="containerBlock containerBlockThree">3</div>
+            <div className="containerBlock containerBlockThree">
+              <div className="title">Список моих работ будет пополняться со временем!</div>
+            </div>
           </div>
         </div>
     );
